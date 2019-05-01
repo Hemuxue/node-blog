@@ -59,8 +59,20 @@ const getTags = (request, response) => {
   })
 }
 
+const getAllTags = (request, response) => {
+  tagsDao.queryAllTag((result) => {
+    if(result) {
+      response.writeHead(200, utf8);
+      response.write(writeResult(200,'success', '获取成功', result));
+      response.end();
+    }
+  })
+}
+
+
 path.set('/createTag', createTags)
 path.set('/deleteTag', deleteTag)
 path.set('/getTags', getTags)
+path.set('/getAllTags',getAllTags)
 
 module.exports.path = path

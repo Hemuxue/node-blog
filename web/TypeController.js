@@ -59,8 +59,18 @@ const getType = (request, response) => {
   })
 }
 
+const getAllType = (request, response) => {
+  typeDao.queryAllType((result) => {
+    if(result) {
+      response.writeHead(200, utf8);
+      response.write(writeResult(200,'success', '获取成功', result));
+      response.end();
+    }
+  })
+}
+
 path.set('/createType', createType)
 path.set('/deleteType', deleteType)
 path.set('/getType', getType)
-
+path.set('/getAllType', getAllType)
 module.exports.path = path
