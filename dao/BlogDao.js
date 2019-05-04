@@ -55,8 +55,22 @@ const deleteBlogById = (id, success) => {
   })
   connection.end();
 }
+const queryBlogById =  (id, success) => {
+	const querySql = "select *  from blog where id = ?";
+	const connection = dbutil.createConnection();
+	connection.connect();
+	connection.query(querySql, id , (error, result) => {
+		if (error === null) {
+			success(result);
+		} else {
+			console.log(error);
+		}
+	})
+	connection.end();
+}
 
 module.exports.insertBlog = insertBlog
 module.exports.queryBlogByPages = queryBlogByPages
 module.exports.queryBlogCount = queryBlogCount
 module.exports.deleteBlogById = deleteBlogById
+module.exports.queryBlogById = queryBlogById

@@ -7,7 +7,6 @@ const { utf8 } = require('../util/requestHeaderConfig')
 const path = new Map();
 const login = (request, response) => {
 	request.on('data', (data) => {
-		console.log(request.cookies);
 		const tempData = JSON.parse(data.toString());
 		userDao.queryUserByPhone(tempData.phone, (result) => {
 			let code ,status, message, data = {};
@@ -40,7 +39,6 @@ const login = (request, response) => {
 const register = (request, response) => {
 	request.on('data', (data) => {
 		const tempData = JSON.parse(data.toString())
-		console.log(tempData);
 		userDao.insertUser(
 			tempData.nick_name,
 			tempData.phone,
@@ -108,7 +106,6 @@ const updateUser = (request, response) => {
 	request.on('data', (data) => {
 		const tempData = JSON.parse(data.toString())
 		const params = [tempData.nick_name, tempData.phone, tempData.password,tempData.email,getNow(), tempData.id ]
-		console.log(tempData);
 		userDao.updateUser(params, (result) => {
 				response.writeHead(200,utf8);
 				response.write(writeResult(200, 'success',"修改成功", {}));

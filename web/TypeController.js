@@ -69,8 +69,19 @@ const getAllType = (request, response) => {
   })
 }
 
+const getTypeCount = (request, response) => {
+  typeDao.queryTypeCount( (res) => {
+    const data = {}
+    data.total = res[0].total
+    response.writeHead(200, utf8);
+    response.write(writeResult(200,'success', '操作成功', data));
+    response.end();
+  })
+}
+
 path.set('/createType', createType)
 path.set('/deleteType', deleteType)
 path.set('/getType', getType)
 path.set('/getAllType', getAllType)
+path.set('/getTypeCount',getTypeCount)
 module.exports.path = path

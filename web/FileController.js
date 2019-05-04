@@ -22,18 +22,13 @@ const upload = (request, response) => {
   })
 } 
 const getPic = (request, response) => { 
-  console.log('inter')
   const params = url.parse(request.url, true).query;
-  console.log(params);
   try {
-    console.log('../' + params.path)
     const data = fs.readFileSync('./' + params.path);
-    console.log(data)
     response.writeHead(200);
     response.write(data);
     response.end();
   } catch (e ) {
-    console.log('inter')
     response.writeHead(404);
     response.end();
   }

@@ -69,10 +69,21 @@ const getAllTags = (request, response) => {
   })
 }
 
+const getTagCount = (request, response) => {
+  tagsDao.queryTagCount( (res) => {
+    const data = {}
+    data.total = res[0].total
+    response.writeHead(200, utf8);
+    response.write(writeResult(200,'success', '操作成功', data));
+    response.end();
+  })
+}
+
 
 path.set('/createTag', createTags)
 path.set('/deleteTag', deleteTag)
 path.set('/getTags', getTags)
 path.set('/getAllTags',getAllTags)
+path.set('/getTagCount',getTagCount)
 
 module.exports.path = path
