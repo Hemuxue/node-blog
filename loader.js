@@ -1,7 +1,5 @@
 const fs = require('fs');
 const globalConfig = require('./config')
-
-const controllerSet = [];
 let pathMap = new Map();
 
 //读文件名

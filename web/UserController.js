@@ -22,10 +22,14 @@ const login = (request, response) => {
 					}
 				}	else {
 					code = 200 ,
-					status = 'erroe'
+					status = 'error'
 					message = '密码错误'
 					data = {}
 				}
+			}else {
+				code = 200,
+				status = 'error'
+				message = '手机号错误'
 			}
 			response.cookie('id','123')
 			response.writeHead(200,utf8);

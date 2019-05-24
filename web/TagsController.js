@@ -1,4 +1,6 @@
 const tagsDao = require('../dao/TagsDao');
+const mappingDao = require('../dao/TypeTagBlogMappingDao')
+const blogDao = require('../dao/BlogDao');
 const url = require('url');
 const { getNow } = require('../util/TimeUtil')
 const { writeResult } = require('../util/RespUtil')
@@ -41,19 +43,32 @@ const getTags = (request, response) => {
     tagsDao.queryTagByPages(params, (result) => {
       let code ,status, message, data = {}, arr = [];
       if( result) {
-        arr = result;
-        data.data = arr
-        tagsDao.queryTagCount( (res) => {
-          data.total = res[0].total
-          data.pageSize = pageSize
-          data.page = page
-          code = 200
-          status = 'success'
-          message = '操作成功'
-          response.writeHead(200, utf8);
-          response.write(writeResult(code,status, message, data));
-          response.end();
+        mappingDao.queryTagGroupByTagId((mapRes) => {
+          if(mapRes) {
+            arr = result;
+            arr.forEach(ele => {
+              ele.number = 0;
+              mapRes.forEach(e=> {
+                if(ele.id === e.tag_id) {
+                  ele.number += +e.total
+                }
+              })
+            })
+            data.data = arr
+            tagsDao.queryTagCount( (res) => {
+              data.total = res[0].total
+              data.pageSize = pageSize
+              data.page = page
+              code = 200
+              status = 'success'
+              message = '操作成功'
+              response.writeHead(200, utf8);
+              response.write(writeResult(code,status, message, data));
+              response.end();
+            })
+          }
         })
+        
       }
     })
   })
@@ -79,11 +94,45 @@ const getTagCount = (request, response) => {
   })
 }
 
+const getTagStatistics = (request, response) => {
+  mappingDao.queryTagGroupByTagId( (mapRes) => {
+    if(mapRes) {
+      tagsDao.queryAllTag((tagRes) =>{ 
+        if(tagRes) {
+          blogDao.queryAllBlog( (blogRes) => {
+            if(blogRes) {
+              mapRes.forEach((ele, index) => {
+                ele.count = 0;
+                tagRes.forEach((e, i) => {
+                  if(ele.tag_id === e.id) {
+                    ele.name = e.tag
+                  }
+                })
+                blogRes.forEach( (e, i) => {
+                  if(ele.name === e.tags){
+                    ele.count += +e.views 
+                  }
+                })
+              })
+          
+              response.writeHead(200, utf8);
+              response.write(writeResult(200,'success', '操作成功', mapRes));
+              response.end();
+            }
+          })
+          
+        }
+      })
+    }
+    
+  })
+}
+
 
 path.set('/createTag', createTags)
 path.set('/deleteTag', deleteTag)
 path.set('/getTags', getTags)
 path.set('/getAllTags',getAllTags)
 path.set('/getTagCount',getTagCount)
-
+path.set('/getTagStatistics',getTagStatistics)
 module.exports.path = path

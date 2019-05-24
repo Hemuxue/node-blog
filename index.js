@@ -21,13 +21,14 @@ app.post('/deleteTag', loader.get('/deleteTag'))
 app.post('/getTags', loader.get('/getTags'))
 app.get('/getAllTags', loader.get('/getAllTags'))
 app.get('/getTagCount', loader.get('/getTagCount'))
-
+app.get('/getTagStatistics', loader.get('/getTagStatistics'))
 //type 表接口
 app.post('/createType', loader.get('/createType'))
 app.post('/deleteType', loader.get('/deleteType'))
 app.post('/getType', loader.get('/getType'))
 app.get('/getAllType', loader.get('/getAllType'))
 app.get('/getTypeCount', loader.get('/getTypeCount'))
+app.get('/getTypeStatistics', loader.get('/getTypeStatistics'))
 
 //file_list 表接口
 app.get('/getPic', loader.get('/getPic'))
@@ -40,6 +41,9 @@ app.get('/getBlogList', loader.get('/getBlogList'))
 app.get('/deleteBlog', loader.get('/deleteBlog'))
 app.get('/getBlogCount', loader.get('/getBlogCount'))
 app.get('/getBlogDetail', loader.get('/getBlogDetail'))
+app.get('/getTypeClassfiy', loader.get('/getTypeClassfiy'))
+app.get('/getTagClassfiy', loader.get('/getTagClassfiy'))
+app.get('/getBlogStatistic', loader.get('/getBlogStatistic'))
 
 //comment 表接口
 app.get('/addComment', loader.get('/addComment'))

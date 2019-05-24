@@ -1,8 +1,8 @@
 const blogDao = require('../dao/BlogDao');
 const TypeTagBlogMappingDao = require('../dao/TypeTagBlogMappingDao')
-const { writeResult } = require('../util/RespUtil')
+const { writeResult, viewsResult } = require('../util/RespUtil')
 const { utf8 } = require('../util/requestHeaderConfig')
-const { getNow } = require('../util/TimeUtil')
+const { getNow, yearFromate } = require('../util/TimeUtil')
 const url = require('url')
 const path = new Map();
 
@@ -76,6 +76,46 @@ const getBlogDetail = (request, response) => {
       response.writeHead(200,utf8);
       response.write(writeResult(200,'success', "操作成功", data));
       response.end();
+      blogDao.addViews( +params.id, function (result) {});
+    }
+  })
+}
+
+const getTypeClassfiy = (request, response) => {
+  const params = url.parse(request.url , true).query
+  blogDao.queryBlogByType(params.type, (result) => {
+    if(result) {
+      const data = result
+      response.writeHead(200,utf8);
+      response.write(writeResult(200,'success', "操作成功", data));
+      response.end();
+    }
+  })
+}
+
+const getTagClassfiy = (request, response) => {
+  const params = url.parse(request.url , true).query
+  blogDao.queryBlogByTag(params.type, (result) => {
+    if(result) {
+      const data = result
+      response.writeHead(200,utf8);
+      response.write(writeResult(200,'success', "操作成功", data));
+      response.end();
+    }
+  })
+}
+
+const getBlogStatistic = (request, response) => {
+  blogDao.queryViewCtime((result) => {
+    if(result) {
+      const data = result
+      data.forEach( ele => {
+        ele.ctime = yearFromate(ele.ctime)
+      })
+      const tempData = viewsResult(data)
+      response.writeHead(200,utf8);
+      response.write(writeResult(200,'success', "操作成功", tempData));
+      response.end();
     }
   })
 }
@@ -84,4 +124,7 @@ path.set('/getBlogList', getBlogList)
 path.set('/getBlogCount', getBlogCount)
 path.set('/deleteBlog', deleteBlog)
 path.set('/getBlogDetail', getBlogDetail)
+path.set('/getTypeClassfiy', getTypeClassfiy)
+path.set('/getTagClassfiy', getTagClassfiy)
+path.set('/getBlogStatistic', getBlogStatistic)
 module.exports.path = path

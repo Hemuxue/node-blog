@@ -16,7 +16,6 @@ const addComment = (request, response) => {
     }
   }
   format(params)
-  console.log(params);
   const insertArr = [+params.bid, +params.parent, +params.replyId , params.replyName, params.userName, params.email, params.comments, getNow(), getNow()];
   commentDao.insertComment(insertArr, (result) => {
     response.writeHead(200,utf8);
